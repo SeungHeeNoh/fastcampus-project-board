@@ -131,7 +131,7 @@ public class ArticleCommentServiceTest {
     }
 
     private ArticleCommentDto createArticleCommentDto(String content) {
-        return ArticleCommentDto.of(1L, 1L, createUserAccountDto(), LocalDateTime.now(), "nsh", LocalDateTime.now(), "nsh", content);
+        return ArticleCommentDto.of(1L, 1L, createUserAccountDto(), content, LocalDateTime.now(), "nsh", LocalDateTime.now(), "nsh");
     }
 
     private UserAccountDto createUserAccountDto() {
