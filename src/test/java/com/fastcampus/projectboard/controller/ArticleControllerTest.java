@@ -20,7 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -101,7 +103,7 @@ class ArticleControllerTest {
     void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // given
         Long articleId = 1L;
-        given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentsDto());
+        given(articleService.getArticle(articleId)).willReturn(createGetArticleByIdResult());
 
         // when & then
         mvc.perform(get("/articles/1"))
@@ -109,7 +111,8 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attributeExists("nextId"));
 
         then(articleService).should().getArticle(articleId);
     }
@@ -138,6 +141,15 @@ class ArticleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/search-hashtag"));
+    }
+
+    private Map<String, Object> createGetArticleByIdResult() {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("article", createArticleWithCommentsDto());
+        resultMap.put("prevId", null);
+        resultMap.put("nextId", 2);
+
+        return resultMap;
     }
 
     private ArticleWithCommentsDto createArticleWithCommentsDto() {

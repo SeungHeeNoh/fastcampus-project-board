@@ -1,7 +1,7 @@
 package com.fastcampus.projectboard.controller;
 
 import com.fastcampus.projectboard.domain.type.SearchType;
-import com.fastcampus.projectboard.dto.ArticleDto;
+import com.fastcampus.projectboard.dto.ArticleWithCommentsDto;
 import com.fastcampus.projectboard.dto.response.ArticleResponse;
 import com.fastcampus.projectboard.dto.response.ArticleWithCommentsResponse;
 import com.fastcampus.projectboard.service.ArticleService;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/articles")
@@ -46,9 +47,13 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     public String article(ModelMap map, @PathVariable("articleId") Long articleId) {
-        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
+        Map<String, Object> result = articleService.getArticle(articleId);
+
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from((ArticleWithCommentsDto) result.get("article"));
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponse());
+        map.addAttribute("prevId", result.get("prevId"));
+        map.addAttribute("nextId", result.get("nextId"));
 
         return "articles/detail";
     }

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +73,8 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
         // when
-        ArticleWithCommentsDto dto = sut.getArticle(articleId); // 제목, 본문, ID, 닉네임, 해시태그
+        Map<String, Object> resultMap = sut.getArticle(articleId);
+        ArticleWithCommentsDto dto = (ArticleWithCommentsDto) resultMap.get("article"); // 제목, 본문, ID, 닉네임, 해시태그
 
         // then
         assertThat(dto)

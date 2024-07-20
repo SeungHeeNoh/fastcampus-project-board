@@ -19,4 +19,15 @@
             <attr sel="div/p" th:text="${articleComment.content}" />
         </attr>
     </attr>
+
+    <attr sel="#pagination">
+        <attr sel="li[0]/a"
+              th:href="${prevId != null ? '/articles/' + prevId : ''}"
+              th:class="'page-link' + (${prevId} == null ? ' disabled' : '')"
+        />
+        <attr sel="li[1]/a"
+              th:href="${nextId != null ? '/articles/' + nextId : ''}"
+              th:class="'page-link' + (${nextId} == null ? ' disabled' : '')"
+        />
+    </attr>
 </thlogic>
