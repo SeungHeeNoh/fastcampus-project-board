@@ -2,9 +2,7 @@ package com.fastcampus.projectboard.service;
 
 import com.fastcampus.projectboard.domain.Article;
 import com.fastcampus.projectboard.domain.type.SearchType;
-import com.fastcampus.projectboard.dto.ArticleCommentDto;
 import com.fastcampus.projectboard.dto.ArticleDto;
-import com.fastcampus.projectboard.dto.ArticleUpdateDto;
 import com.fastcampus.projectboard.dto.ArticleWithCommentsDto;
 import com.fastcampus.projectboard.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -74,8 +74,22 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
-    public ArticleWithCommentsDto getArticle(Long articleId) {
-        return articleRepository.findById(articleId).map(ArticleWithCommentsDto::from)
+    @Transactional(readOnly = true)
+    public Map<String, Object> getArticle(Long articleId) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        ArticleWithCommentsDto articleWithCommentsDto = articleRepository.findById(articleId).map(ArticleWithCommentsDto::from)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다. - articleId : " + articleId));
+
+        resultMap.put("article", articleWithCommentsDto);
+        List<Long> prevNextArticleIds = articleRepository.findPrevNextArticleIds(articleWithCommentsDto.id());
+
+        Long prevId = prevNextArticleIds.size() > 1 ? prevNextArticleIds.get(0) : (!prevNextArticleIds.isEmpty() && prevNextArticleIds.get(0) < articleId ? prevNextArticleIds.get(0) : null);
+        Long nextId = prevNextArticleIds.size() > 1 ? prevNextArticleIds.get(1) : (!prevNextArticleIds.isEmpty() && prevNextArticleIds.get(0) > articleId ? prevNextArticleIds.get(0) : null);
+
+        resultMap.put("prevId", prevId);
+        resultMap.put("nextId", nextId);
+
+        return resultMap;
     }
 }
