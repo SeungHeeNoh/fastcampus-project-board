@@ -16,13 +16,13 @@
         <form>
             <div class="card search-form">
                 <div class="card-body p-0">
-                    <form id="search-form">
+                    <form action="/articles" method="get">
                         <div class="row">
                             <div class="col-12">
                                 <div class="row no-gutters">
                                     <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                        <label for="exampleFormControlSelect1" hidden="hidden">유형</label>
-                                        <select class="form-control" id="exampleFormControlSelect1">
+                                        <label for="search-type" hidden="hidden">유형</label>
+                                        <select class="form-control" id="search-type" name="searchType">
                                             <option>제목</option>
                                             <option>본문</option>
                                             <option>ID</option>
@@ -31,8 +31,8 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-8 col-md-6 col-sm-12 p-0">
-                                        <label for="search" hidden="hidden">검색어</label>
-                                        <input type="text" placeholder="Search..." class="form-control" id="search search-value" name="search">
+                                        <label for="search-value" hidden="hidden">검색어</label>
+                                        <input type="text" placeholder="Search..." class="form-control" id="search-value" name="searchValue">
                                     </div>
                                     <div class="col-lg-1 col-md-3 col-sm-12 p-0">
                                         <button type="submit" class="btn btn-base">
