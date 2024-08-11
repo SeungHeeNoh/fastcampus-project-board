@@ -135,7 +135,7 @@ public class ArticleCommentServiceTest {
     }
 
     private UserAccountDto createUserAccountDto() {
-        return UserAccountDto.of(1L, "nsh", "password", "nsh@email.com", "nsh", null, LocalDateTime.now(), "nsh", LocalDateTime.now(), "nsh");
+        return UserAccountDto.of("nsh", "password", "nsh@email.com", "nsh", null, LocalDateTime.now(), "nsh", LocalDateTime.now(), "nsh");
     }
 
     private Article createArticle() {
